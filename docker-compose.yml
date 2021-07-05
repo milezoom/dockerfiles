@@ -26,7 +26,6 @@ services:
         container_name: nodejs
         volumes:
             - nodejs-data:/app
-    
     golang:
         build:
             context: .
@@ -35,7 +34,6 @@ services:
         container_name: golang
         volumes: 
             - golang-data:/app
-
     dotnet:
         build:
             context: .
