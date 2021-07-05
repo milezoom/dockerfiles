@@ -1,0 +1,53 @@
+version: "3"
+services:
+    redis:
+        image: redis:4.0-alpine
+        container_name: redis
+        command: sh -c "redis-server --appendonly yes"
+        ports:
+            - 6379:6379
+        volumes:
+            - redis-data:/data
+    php73:
+        build:
+            context: .
+            dockerfile: Dockerfile.php73
+        image: php73:1.0.0
+        container_name: php73
+        ports: 
+            - 80:80
+        volumes:
+            - php73-data:/var/www/html
+    nodejs:
+        build:
+            context: .
+            dockerfile: Dockerfile.nodejs
+        image: nodejs:1.0.0
+        container_name: nodejs
+        volumes:
+            - nodejs-data:/app
+    
+    golang:
+        build:
+            context: .
+            dockerfile: Dockerfile.golang
+        image: golang:1.0.0
+        container_name: golang
+        volumes: 
+            - golang-data:/app
+
+    dotnet:
+        build:
+            context: .
+            dockerfile: Dockerfile.dotnet
+        image: dotnet:1.0.0
+        container_name: dotnet
+        volumes:
+            - dotnet-data:/app
+
+volumes: 
+    redis-data:
+    php73-data:
+    nodejs-data:
+    golang-data:
+    dotnet-data:

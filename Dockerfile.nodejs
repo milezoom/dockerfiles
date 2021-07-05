@@ -1,0 +1,9 @@
+FROM bitnami/minideb as builder
+
+RUN apt-get -y update && apt-get -y install apt-utils iproute2 curl git login unzip procps python build-essential && \
+    curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o /usr/local/bin/n && \
+    chmod a+x /usr/local/bin/n && bash /usr/local/bin/n 10 && mkdir -p /app
+
+WORKDIR /app
+
+CMD tail -f /dev/null

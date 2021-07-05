@@ -1,0 +1,14 @@
+FROM bitnami/minideb as builder
+
+RUN apt-get -y update && apt-get -y install apt-utils iproute2 curl git login unzip procps build-essential && \
+    curl -L -o /tmp/gosetup.tar.gz https://golang.org/dl/go1.16.5.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf /tmp/gosetup.tar.gz && rm /tmp/gosetup.tar.gz && \
+    export PATH=$PATH:/usr/local/go/bin && export GOPATH=/root/.go && \
+    mkdir -p /app
+
+ENV PATH="${PATH}:/usr/local/go/bin"
+ENV GOPATH="/root/.go"
+
+WORKDIR /app
+
+CMD tail -f /dev/null

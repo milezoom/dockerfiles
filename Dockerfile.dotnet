@@ -1,0 +1,12 @@
+FROM bitnami/minideb as builder
+
+RUN apt-get -y update && apt-get -y install apt-utils iproute2 curl git login unzip procps build-essential && \
+    curl -L -o /tmp/packages-microsoft-prod.deb https://packages.microsoft.com/config/debian/10/packages-microsoft-prod.deb && \
+    dpkg -i /tmp/packages-microsoft-prod.deb && rm /tmp/packages-microsoft-prod.deb && \
+    apt-get -y update && apt-get -y install apt-transport-https && \
+    apt-get -y update && apt-get install -y dotnet-sdk-5.0 aspnetcore-runtime-5.0 && \
+    mkdir /app
+
+WORKDIR /app
+
+CMD tail -f /dev/null
