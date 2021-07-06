@@ -42,6 +42,13 @@ services:
         container_name: dotnet
         volumes:
             - dotnet-data:/app
+    mongodb:
+        image: bitnami/mongodb:4.4
+        container_name: mongodb
+        ports:
+            - 27017:27017
+        volumes:
+            - mongodb-data:/bitnami/mongodb 
 
 volumes: 
     redis-data:
@@ -49,3 +56,4 @@ volumes:
     nodejs-data:
     golang-data:
     dotnet-data:
+    mongodb-data:
