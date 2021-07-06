@@ -6,7 +6,7 @@ RUN apt-get -y update && apt-get -y install apt-utils iproute2 curl git login un
     export PATH=$PATH:/usr/local/go/bin:/root/.go/bin && export GOPATH=/root/.go && \
     mkdir -p /app
 
-ENV PATH="${PATH}:/usr/local/go/bin"
+ENV PATH="${PATH}:/usr/local/go/bin:/root/.go/bin"
 ENV GOPATH="/root/.go"
 
 WORKDIR /app
