@@ -1,9 +1,11 @@
 version: "3"
 services:
     redis:
-        image: redis:4.0-alpine
+        image: bitnami/redis:4.0
         container_name: redis
-        command: sh -c "redis-server"
+        environment: 
+            - ALLOW_EMPTY_PASSWORD=yes
+            - REDIS_AOF_ENABLED=no
         ports:
             - 6379:6379
     php73:
