@@ -3,6 +3,7 @@ services:
     redis:
         image: redis:4.0-alpine
         container_name: redis
+        command: sh -c "redis-server"
         ports:
             - 6379:6379
     php73:
