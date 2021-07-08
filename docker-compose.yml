@@ -3,11 +3,8 @@ services:
     redis:
         image: redis:4.0-alpine
         container_name: redis
-        command: sh -c "redis-server --appendonly yes"
         ports:
             - 6379:6379
-        volumes:
-            - redis-data:/data
     php73:
         build:
             context: .
@@ -50,8 +47,7 @@ services:
         volumes:
             - mongodb-data:/bitnami/mongodb 
 
-volumes: 
-    redis-data:
+volumes:
     php73-data:
     nodejs-data:
     golang-data:
