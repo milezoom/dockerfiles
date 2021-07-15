@@ -18,12 +18,20 @@ services:
             - 80:80
         volumes:
             - php73-data:/var/www/html
-    nodejs:
+    nodejs10:
         build:
             context: .
             dockerfile: Dockerfile.nodejs
         image: nodejs:1.0.0
-        container_name: nodejs
+        container_name: nodejs10
+        volumes:
+            - nodejs-data:/app
+    nodejs14:
+        build:
+            context: .
+            dockerfile: Dockerfile.nodejs14
+        image: nodejs:1.0.0
+        container_name: nodejs14
         volumes:
             - nodejs-data:/app
     golang:
