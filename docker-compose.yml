@@ -14,8 +14,6 @@ services:
             dockerfile: Dockerfile.php73
         image: php73:1.0.0
         container_name: php73
-        ports: 
-            - 80:80
         volumes:
             - php73-data:/var/www/html
     nodejs10:
