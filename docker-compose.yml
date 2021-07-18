@@ -15,7 +15,15 @@ services:
         image: php73:1.0.0
         container_name: php73
         volumes:
-            - php73-data:/var/www/html
+            - php-data:/var/www/html
+    php70:
+        build:
+            context: .
+            dockerfile: Dockerfile.php70
+        image: php70:1.0.0
+        container_name: php70
+        volumes:
+            - php-data:/var/www/html
     nodejs10:
         build:
             context: .
@@ -57,7 +65,7 @@ services:
             - mongodb-data:/bitnami/mongodb 
 
 volumes:
-    php73-data:
+    php-data:
     nodejs-data:
     golang-data:
     dotnet-data:
