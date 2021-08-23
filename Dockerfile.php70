@@ -8,10 +8,10 @@ RUN apt-get -y update && apt-get -y install apt-utils iproute2 axel curl git log
     echo "#!/bin/bash" >> /root/cmd.sh && \
     echo "source /etc/apache2/envvars" >> /root/cmd.sh && \
     echo "rm -f /var/run/apache2/apache2.pid" >> /root/cmd.sh && \
-    echo "/usr/sbin/apache2" >> /root/cmd.sh && \
+    echo "/usr/sbin/apache2 -DFOREGROUND" >> /root/cmd.sh && \
     chmod +x /root/cmd.sh
 
 WORKDIR /var/www/html
 
-# CMD [ "/root/cmd.sh" ]
-CMD tail -f /dev/null
+CMD [ "/root/cmd.sh" ]
+# CMD tail -f /dev/null
