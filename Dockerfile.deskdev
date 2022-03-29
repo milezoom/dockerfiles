@@ -1,0 +1,17 @@
+FROM debian:stable-slim AS builder
+
+RUN apt-get -y update && apt-get -y install apt-utils iproute2 curl git login unzip procps \
+    build-essential libgtk-3-dev libwebkit2gtk-4.0-dev pkg-config && \
+    curl -L -o /tmp/gosetup.tar.gz https://golang.org/dl/go1.17.7.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf /tmp/gosetup.tar.gz && rm /tmp/gosetup.tar.gz && \
+    export PATH=$PATH:/usr/local/go/bin:/root/.go/bin && export GOPATH=/root/.go && \
+    curl -L https://raw.githubusercontent.com/tj/n/master/bin/n -o /usr/local/bin/n && \
+    chmod a+x /usr/local/bin/n && bash /usr/local/bin/n 16 && \
+    npm install -g corepack && mkdir -p app
+
+ENV PATH="${PATH}:/usr/local/go/bin:/root/.go/bin"
+ENV GOPATH="/root/.go"
+
+WORKDIR /app
+
+CMD tail -f /dev/null

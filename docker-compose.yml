@@ -15,7 +15,7 @@ services:
         image: php73:1.0.0
         container_name: php73
         volumes:
-            - php-data:/var/www/html
+            - php_data:/var/www/html
     php70:
         build:
             context: .
@@ -23,7 +23,7 @@ services:
         image: php70:1.0.0
         container_name: php70
         volumes:
-            - php-data:/var/www/html
+            - php_data:/var/www/html
         ports:
             - 9000:80
     nodejs10:
@@ -33,23 +33,33 @@ services:
         image: nodejs:1.0.0
         container_name: nodejs10
         volumes:
-            - nodejs-data:/app
-    nodejs14:
+            - nodejs_data:/app
+    nodejs-latest:
         build:
             context: .
-            dockerfile: Dockerfile.nodejs14
+            dockerfile: Dockerfile.nodejs-latest
         image: nodejs:1.0.0
-        container_name: nodejs14
+        container_name: nodejs-latest
         volumes:
-            - nodejs-data:/app
+            - nodejs_data:/app
     golang:
         build:
             context: .
             dockerfile: Dockerfile.golang
         image: golang:1.0.0
         container_name: golang
+        security_opt:
+            - seccomp:unconfined
         volumes: 
-            - golang-data:/app
+            - golang_data:/app
+    ruby:
+        build:
+            context: .
+            dockerfile: Dockerfile.ruby
+        image: ruby:1.0.0
+        container_name: ruby
+        volumes: 
+            - ruby_data:/app
     dotnet:
         build:
             context: .
@@ -57,18 +67,38 @@ services:
         image: dotnet:1.0.0
         container_name: dotnet
         volumes:
-            - dotnet-data:/app
+            - dotnet_data:/app
     mongodb:
-        image: bitnami/mongodb:4.4
+        image: bitnami/mongodb:5.0
         container_name: mongodb
+        environment:
+            - MONGODB_REPLICA_SET_MODE=primary
+            - MONGODB_ADVERTISED_HOSTNAME=mongodb
+            - ALLOW_EMPTY_PASSWORD=yes
         ports:
             - 27017:27017
         volumes:
-            - mongodb-data:/bitnami/mongodb 
+            - mongodb_data:/bitnami/mongodb
+    deskdev:
+        build:
+            context: .
+            dockerfile: Dockerfile.deskdev
+        image: deskdev:1.0.0
+        container_name: deskdev
+        environment:
+            - DISPLAY=:0
+            - WAYLAND_DISPLAY=:0
+            - XDG_RUNTIME_DIR=/mnt/wslg/runtime-dir
+            - PULSE_SERVER=/mnt/wslg/PulseServer
+        volumes:
+            - golang_data:/app
+            - /tmp/.X11-unix:/tmp/.X11-unix
+            - /mnt/wslg:/mnt/wslg
 
 volumes:
-    php-data:
-    nodejs-data:
-    golang-data:
-    dotnet-data:
-    mongodb-data:
+    php_data:
+    nodejs_data:
+    golang_data:
+    ruby_data:
+    dotnet_data:
+    mongodb_data:
