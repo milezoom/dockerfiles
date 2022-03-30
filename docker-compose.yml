@@ -79,6 +79,17 @@ services:
             - 27017:27017
         volumes:
             - mongodb_data:/bitnami/mongodb
+    postgresql:
+        image: bitnami/postgresql:14
+        container_name: postgresql
+        environment:
+            - POSTGRESQL_USERNAME=postgresql
+            - POSTGRESQL_PASSWORD=postgresql
+            - POSTGRESQL_DATABASE=public
+        ports:
+            - 5432:5432
+        volumes:
+            - postgresql_data:/bitnami/postgresql
     deskdev:
         build:
             context: .
