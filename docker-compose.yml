@@ -106,15 +106,6 @@ services:
             - deskdev_data:/app
             - /tmp/.X11-unix:/tmp/.X11-unix
             - /mnt/wslg:/mnt/wslg
-    localstack:
-        image: docker.io/localstack/localstack:0.14
-        container_name: localstack
-        environment:
-            - LOCALSTACK_SERVICES=s3,redshift
-            - LOCALSTACK_DATA_DIR=${TMPDIR}/localstack/data
-            - LOCALSTACK_HOST_TMP_FOLDER=${TMPDIR}
-        volumes:
-            - localstack_data:/tmp/localstack
 
 volumes:
     php_data:
@@ -124,4 +115,3 @@ volumes:
     dotnet_data:
     mongodb_data:
     deskdev_data:
-    localstack_data:
