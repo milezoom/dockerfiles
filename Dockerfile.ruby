@@ -1,4 +1,4 @@
-FROM bitnami/minideb as builder
+FROM docker.io/bitnami/minideb as builder
 
 RUN apt-get -y update && apt-get -y install apt-utils iproute2 curl git login unzip procps libpq-dev build-essential && \
     rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && \

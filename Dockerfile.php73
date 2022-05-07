@@ -1,4 +1,4 @@
-FROM bitnami/minideb as builder
+FROM docker.io/bitnami/minideb as builder
 
 RUN apt-get -y update && apt-get -y install apt-utils iproute2 axel curl git login unzip procps nano && \
     apt-get -y install php apache2 php-bcmath php-curl php-pgsql php-xml php-intl php-redis php-mbstring php-zip php-gd && \
@@ -12,6 +12,7 @@ RUN apt-get -y update && apt-get -y install apt-utils iproute2 axel curl git log
     echo "chmod 777 -R /var/www/html/tms/logs 2>/dev/null" >> /root/cmd.sh && \
     echo "chmod 777 -R /var/www/html/masterdata/logs 2>/dev/null" >> /root/cmd.sh && \
     echo "chmod 777 -R /var/www/html/wapp/wcpcache/logs 2>/dev/null" >> /root/cmd.sh && \
+    echo "chmod 777 -R /var/www/html/wapp/upload 2>/dev/null" >> /root/cmd.sh && \
     chmod +x /root/cmd.sh
 
 WORKDIR /var/www/html

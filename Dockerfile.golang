@@ -1,12 +1,11 @@
-FROM bitnami/minideb as builder
+FROM docker.io/bitnami/minideb as builder
+
+COPY go.sh /root/go.sh
 
 RUN apt-get -y update && apt-get -y install apt-utils iproute2 curl git login bison unzip procps build-essential && \
-    git clone https://github.com/syndbg/goenv.git ~/.goenv && \
-    echo 'export GOENV_ROOT="$HOME/.goenv"' >> ~/.bashrc && \
-    echo 'export PATH="$GOENV_ROOT/bin:$PATH"' >> ~/.bashrc && \
-    echo 'eval "$(goenv init -)"' >> ~/.bashrc && \
-    echo 'export PATH="$GOROOT/bin:$PATH"' >> ~/.bashrc && \
-    echo 'export PATH="$PATH:$GOPATH/bin"' >> ~/.bashrc && \
+    curl -L -o /tmp/gosetup.tar.gz https://go.dev/dl/go1.18.linux-amd64.tar.gz && \
+    rm -rf /usr/local/go && tar -C /usr/local -xzf /tmp/gosetup.tar.gz && rm -rf /tmp/gosetup.tar.gz && \
+    export PATH=$PATH:/usr/local/go/bin:/root/.go/bin && export GOPATH=/root/.go && \
     mkdir -p /app
 
 WORKDIR /app

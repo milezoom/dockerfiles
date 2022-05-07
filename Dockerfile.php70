@@ -1,4 +1,4 @@
-FROM bitnami/minideb:stretch-amd64 as builder
+FROM docker.io/bitnami/minideb:stretch-amd64 as builder
 
 RUN apt-get -y update && apt-get -y install apt-utils iproute2 axel curl git login unzip procps nano && \
     apt-get -y install php apache2 php-bcmath php-curl php-xml php-intl php-redis php-mbstring php-zip \

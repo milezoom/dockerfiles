@@ -1,13 +1,6 @@
 version: "3"
+
 services:
-    redis:
-        image: bitnami/redis:4.0
-        container_name: redis
-        environment: 
-            - ALLOW_EMPTY_PASSWORD=yes
-            - REDIS_AOF_ENABLED=no
-        ports:
-            - 6379:6379
     php73:
         build:
             context: .
@@ -69,7 +62,7 @@ services:
         volumes:
             - dotnet_data:/app
     mongodb:
-        image: bitnami/mongodb:5.0
+        image: docker.io/bitnami/mongodb:5.0
         container_name: mongodb
         environment:
             - MONGODB_REPLICA_SET_MODE=primary
@@ -80,7 +73,7 @@ services:
         volumes:
             - mongodb_data:/bitnami/mongodb
     postgresql:
-        image: bitnami/postgresql:14
+        image: docker.io/bitnami/postgresql:14
         container_name: postgresql
         environment:
             - POSTGRESQL_USERNAME=postgresql
@@ -90,6 +83,14 @@ services:
             - 5432:5432
         volumes:
             - postgresql_data:/bitnami/postgresql
+    redis:
+        image: docker.io/bitnami/redis:4.0
+        container_name: redis
+        environment: 
+            - ALLOW_EMPTY_PASSWORD=yes
+            - REDIS_AOF_ENABLED=no
+        ports:
+            - 6379:6379
     deskdev:
         build:
             context: .
@@ -102,9 +103,18 @@ services:
             - XDG_RUNTIME_DIR=/mnt/wslg/runtime-dir
             - PULSE_SERVER=/mnt/wslg/PulseServer
         volumes:
-            - golang_data:/app
+            - deskdev_data:/app
             - /tmp/.X11-unix:/tmp/.X11-unix
             - /mnt/wslg:/mnt/wslg
+    localstack:
+        image: docker.io/localstack/localstack:0.14
+        container_name: localstack
+        environment:
+            - LOCALSTACK_SERVICES=s3,redshift
+            - LOCALSTACK_DATA_DIR=${TMPDIR}/localstack/data
+            - LOCALSTACK_HOST_TMP_FOLDER=${TMPDIR}
+        volumes:
+            - localstack_data:/tmp/localstack
 
 volumes:
     php_data:
@@ -113,3 +123,5 @@ volumes:
     ruby_data:
     dotnet_data:
     mongodb_data:
+    deskdev_data:
+    localstack_data:
