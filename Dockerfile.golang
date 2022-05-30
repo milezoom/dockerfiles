@@ -1,12 +1,12 @@
 FROM docker.io/bitnami/minideb as builder
 
-COPY go.sh /root/go.sh
-
 RUN apt-get -y update && apt-get -y install apt-utils iproute2 curl git login bison unzip procps build-essential && \
-    curl -L -o /tmp/gosetup.tar.gz https://go.dev/dl/go1.18.linux-amd64.tar.gz && \
+    curl -L -o /tmp/gosetup.tar.gz https://go.dev/dl/go1.18.2.linux-amd64.tar.gz && \
     rm -rf /usr/local/go && tar -C /usr/local -xzf /tmp/gosetup.tar.gz && rm -rf /tmp/gosetup.tar.gz && \
-    export PATH=$PATH:/usr/local/go/bin:/root/.go/bin && export GOPATH=/root/.go && \
     mkdir -p /app
+
+ENV PATH="/usr/local/go/bin:/root/go/bin:${PATH}"
+ENV GOPATH=/root/go
 
 WORKDIR /app
 
