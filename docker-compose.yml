@@ -106,21 +106,17 @@ services:
             - deskdev_data:/app
             - /tmp/.X11-unix:/tmp/.X11-unix
             - /mnt/wslg:/mnt/wslg
-    minio:
-        image: quay.io/minio/minio
-        container_name: minio
-        command: server /data --console-address ":9001"
-        secrets:
-          - access_key
-          - secret_key
+    localstack:
+        image: docker.io/localstack/localstack:0.14.3
+        container_name: localstack
         environment:
-            - MINIO_ROOT_USER=access_key
-            - MINIO_ROOT_PASSWORD=secret_key
+            - LOCALSTACK_DATA_DIR=/data
+            - LOCALSTACK_SERVICES=s3
         ports:
-            - 9000:9000
-            - 9001:9001
+            - 4566:4566
+            - 4510-4559:4510-4559
         volumes:
-            - minio_data:/data
+            - localstack_data:/data
 
 volumes:
     php_data:
@@ -130,10 +126,4 @@ volumes:
     dotnet_data:
     mongodb_data:
     deskdev_data:
-    minio_data:
-
-secrets:
-    access_key:
-        external: true
-    secret_key:
-        external: true
+    localstack_data:
