@@ -91,6 +91,18 @@ services:
             - REDIS_AOF_ENABLED=no
         ports:
             - 6379:6379
+    mariadb:
+        image: docker.io/bitnami/mariadb:10.6.8
+        container_name: mariadb
+        environment:
+            - MARIADB_ROOT_USER=root
+            - MARIADB_ROOT_PASSWORD=mariadb
+            - MARIADB_DATABASE=default
+            - MARIADB_SKIP_TEST_DB=yes
+        ports:
+            - 3306:3306
+        volumes:
+            - mariadb_data:/bitnami/mariadb
     deskdev:
         build:
             context: .
@@ -125,5 +137,7 @@ volumes:
     ruby_data:
     dotnet_data:
     mongodb_data:
+    postgresql_data:
+    mariadb_data:
     deskdev_data:
     localstack_data:
