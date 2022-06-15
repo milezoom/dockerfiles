@@ -129,6 +129,43 @@ services:
             - 4510-4559:4510-4559
         volumes:
             - localstack_data:/data
+    zookeeper:
+        image: docker.io/bitnami/zookeeper:3.8
+        container_name: zookeeper
+        ports:
+            - 2181:2181
+        environment:
+            - ALLOW_ANONYMOUS_LOGIN=yes
+        volumes:
+            - zookeeper_data:/bitnami/zookeeper
+    kafka:
+        image: docker.io/bitnami/kafka:3.2
+        container_name: kafka
+        environment:
+            - KAFKA_BROKER_ID=1
+            - ALLOW_PLAINTEXT_LISTENER=yes
+            - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+            - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CLIENT:PLAINTEXT,EXTERNAL:PLAINTEXT
+            - KAFKA_CFG_LISTENERS=CLIENT://:9092,EXTERNAL://:9093
+            - KAFKA_CFG_ADVERTISED_LISTENERS=CLIENT://kafka:9092,EXTERNAL://localhost:9093
+            - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=CLIENT
+        ports:
+            - 9092:9092
+            - 9093:9093
+        depends_on:
+            - zookeeper
+    kafka-ui:
+        image: docker.io/provectuslabs/kafka-ui:v0.4.0
+        container_name: kafka-ui
+        environment:
+            - KAFKA_CLUSTERS_0_NAME=local
+            - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+            - KAFKA_CLUSTERS_0_ZOOKEEPER=localhost:2181
+        ports:
+            - 9000:8080
+        depends_on:
+            - kafka
+            - zookeeper
 
 volumes:
     php_data:
@@ -141,3 +178,4 @@ volumes:
     mariadb_data:
     deskdev_data:
     localstack_data:
+    zookeeper_data:
