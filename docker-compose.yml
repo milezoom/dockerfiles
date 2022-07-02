@@ -4,21 +4,19 @@ services:
     php73:
         build:
             context: .
-            dockerfile: Dockerfile.php73
-        image: php73:1.0.0
+            dockerfile: Dockerfile.php73x
+        image: php73x:1.0.0
         container_name: php73
         volumes:
             - php_data:/var/www/html
-    php70:
+    php81:
         build:
             context: .
-            dockerfile: Dockerfile.php70
-        image: php70:1.0.0
-        container_name: php70
+            dockerfile: Dockerfile.php81
+        image: php81:1.0.0
+        container_name: php81
         volumes:
             - php_data:/var/www/html
-        ports:
-            - 9000:80
     nodejs10:
         build:
             context: .

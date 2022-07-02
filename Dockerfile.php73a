@@ -4,7 +4,6 @@ RUN apt-get -y update && apt-get -y install apt-utils iproute2 axel curl git log
     apt-get -y install php apache2 php-bcmath php-curl php-pgsql php-xml php-intl php-redis php-mbstring php-zip php-gd && \
     rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && \
     sed -i -e 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf && a2enmod rewrite && \
-    axel -n 8 -o /root/composer.phar "https://getcomposer.org/download/latest-stable/composer.phar" && \
     echo "#!/bin/bash" >> /root/cmd.sh && \
     echo "source /etc/apache2/envvars" >> /root/cmd.sh && \
     echo "rm -f /var/run/apache2/apache2.pid" >> /root/cmd.sh && \

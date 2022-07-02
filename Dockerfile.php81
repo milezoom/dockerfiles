@@ -1,0 +1,40 @@
+FROM docker.io/bitnami/minideb:bullseye
+
+RUN touch /root/default && \
+    echo 'server {' >> /root/default && \
+    echo '  listen 80 default_server;' >> /root/default && \
+    echo '  listen [::]:80 default_server;' >> /root/default && \
+    echo '  root /var/www/html;' >> /root/default && \
+    echo '  index index.php index.html index.htm index.nginx-debian.html;' >> /root/default && \
+    echo '  server_name tms.sicepat.local masterdata.sicepat.local _;' >> /root/default && \
+    echo '  location / {' >> /root/default && \
+    echo '      autoindex on;' >> /root/default && \
+    echo '      try_files $uri $uri/ =404;' >> /root/default && \
+    echo '  }' >> /root/default && \
+    echo '  location ~ \.php$ {' >> /root/default && \
+    echo '      include snippets/fastcgi-php.conf;' >> /root/default && \
+    echo '      fastcgi_pass unix:/run/php/php8.1-fpm.sock;' >> /root/default && \
+    echo '  }' >> /root/default && \
+    echo '  location ~ /\.ht {' >> /root/default && \
+    echo '      deny all;' >> /root/default && \
+    echo '  }' >> /root/default && \
+    echo '}' >> /root/default
+
+RUN apt-get -y update && apt-get -y install apt-transport-https lsb-release ca-certificates curl && \
+    curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg && \
+    sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list' && \
+    apt-get -y update && apt-get -y install apt-utils iproute2 axel curl git login unzip procps nano nginx-light php8.1-fpm php8.1-cli && \
+    apt-get -y install php8.1-bcmath php8.1-curl php8.1-pgsql php8.1-xml php8.1-intl php8.1-mbstring php8.1-zip php8.1-gd php8.1-xdebug php8.1-redis && \
+    rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && \
+    mv /etc/nginx/sites-available/default /etc/nginx/sites-available/default.bak && mv /root/default /etc/nginx/sites-available && \
+    echo '' >> /etc/php/8.1/fpm/php.ini && \
+    echo '[xdebug]' >> /etc/php/8.1/fpm/php.ini && \
+    echo 'xdebug.mode=debug' >> /etc/php/8.1/fpm/php.ini && \
+    echo 'xdebug.start_with_request=yes' >> /etc/php/8.1/fpm/php.ini && \
+    echo '' >> /etc/php/8.1/fpm/php.ini && \
+    mkdir /run/php && \
+    axel -n 8 -o /root/composer.phar "https://getcomposer.org/download/latest-stable/composer.phar"
+
+WORKDIR /var/www/html
+
+CMD tail -f /dev/null

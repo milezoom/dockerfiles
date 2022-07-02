@@ -1,0 +1,73 @@
+FROM docker.io/bitnami/minideb:bullseye
+
+RUN touch /root/tms.sicepat.local && \
+    echo 'server {' >> /root/tms.sicepat.local && \
+    echo '  listen 80;' >> /root/tms.sicepat.local && \
+    echo '  listen [::]:80;' >> /root/tms.sicepat.local && \
+    echo '  root /var/www/html/wapp;' >> /root/tms.sicepat.local && \
+    echo '  index index.php;' >> /root/tms.sicepat.local && \
+    echo '  server_name tms.sicepat.local;' >> /root/tms.sicepat.local && \
+    echo '  location / {' >> /root/tms.sicepat.local && \
+    echo '      autoindex on;' >> /root/tms.sicepat.local && \
+    echo '      try_files $uri $uri/ /index.php?$args;' >> /root/tms.sicepat.local && \
+    echo '  }' >> /root/tms.sicepat.local && \
+    echo '  location ~ \.php$ {' >> /root/tms.sicepat.local && \
+    echo '      include snippets/fastcgi-php.conf;' >> /root/tms.sicepat.local && \
+    echo '      fastcgi_pass unix:/run/php/php7.3-fpm.sock;' >> /root/tms.sicepat.local && \
+    echo '  }' >> /root/tms.sicepat.local && \
+    echo '  location ~ /\.ht {' >> /root/tms.sicepat.local && \
+    echo '      deny all;' >> /root/tms.sicepat.local && \
+    echo '  }' >> /root/tms.sicepat.local && \
+    echo '}' >> /root/tms.sicepat.local && \
+    touch /root/masterdata.sicepat.local && \
+    echo 'server {' >> /root/masterdata.sicepat.local && \
+    echo '  listen 80;' >> /root/masterdata.sicepat.local && \
+    echo '  listen [::]:80;' >> /root/masterdata.sicepat.local && \
+    echo '  root /var/www/html/wapp;' >> /root/masterdata.sicepat.local && \
+    echo '  index index.php;' >> /root/masterdata.sicepat.local && \
+    echo '  server_name masterdata.sicepat.local;' >> /root/masterdata.sicepat.local && \
+    echo '  location / {' >> /root/masterdata.sicepat.local && \
+    echo '      autoindex on;' >> /root/masterdata.sicepat.local && \
+    echo '      try_files $uri $uri/ /index.php?$args;' >> /root/masterdata.sicepat.local && \
+    echo '  }' >> /root/masterdata.sicepat.local && \
+    echo '  location ~ \.php$ {' >> /root/masterdata.sicepat.local && \
+    echo '      include snippets/fastcgi-php.conf;' >> /root/masterdata.sicepat.local && \
+    echo '      fastcgi_pass unix:/run/php/php7.3-fpm.sock;' >> /root/masterdata.sicepat.local && \
+    echo '  }' >> /root/masterdata.sicepat.local && \
+    echo '  location ~ /\.ht {' >> /root/masterdata.sicepat.local && \
+    echo '      deny all;' >> /root/masterdata.sicepat.local && \
+    echo '  }' >> /root/masterdata.sicepat.local && \
+    echo '}' >> /root/masterdata.sicepat.local
+
+RUN apt-get -y update && apt-get -y install apt-transport-https lsb-release ca-certificates curl && \
+    curl -sSLo /usr/share/keyrings/deb.sury.org-php.gpg https://packages.sury.org/php/apt.gpg && \
+    sh -c 'echo "deb [signed-by=/usr/share/keyrings/deb.sury.org-php.gpg] https://packages.sury.org/php/ $(lsb_release -sc) main" > /etc/apt/sources.list.d/php.list' && \
+    apt-get -y update && \
+    apt-get -y install apt-utils iproute2 axel curl git login unzip procps nano nginx-light php7.3-dev php-pear php7.3-cli php7.3-fpm && \
+    apt-get -y install php7.3-bcmath php7.3-curl php7.3-pgsql php7.3-xml php7.3-intl php7.3-mbstring php7.3-zip php7.3-gd php7.3-xdebug && \
+    pecl channel-update pecl.php.net && sh -c 'prinf "\n" | pecl install redis-4.3.0' && \
+    echo 'extension=redis.so' >> /etc/php/7.3/fpm/conf.d/20-redis.ini && \
+    rm -rf /etc/localtime && ln -s /usr/share/zoneinfo/Asia/Jakarta /etc/localtime && \
+    mv /root/tms.sicepat.local /etc/nginx/sites-available && \
+    ln -s /etc/nginx/sites-available/tms.sicepat.local /etc/nginx/sites-enabled/tms.sicepat.local && \
+    mv /root/masterdata.sicepat.local /etc/nginx/sites-available && \
+    ln -s /etc/nginx/sites-available/masterdata.sicepat.local /etc/nginx/sites-enabled/masterdata.sicepat.local && \
+    echo '' >> /etc/php/7.3/fpm/php.ini && \
+    echo '[xdebug]' >> /etc/php/7.3/fpm/php.ini && \
+    echo 'xdebug.mode=debug' >> /etc/php/7.3/fpm/php.ini && \
+    echo 'xdebug.start_with_request=yes' >> /etc/php/7.3/fpm/php.ini && \
+    echo '' >> /etc/php/7.3/fpm/php.ini && \
+    mkdir /run/php && \
+    echo "#!/bin/bash" >> /root/cmd.sh && \
+    echo "chmod 777 -R /var/www/html/tms/logs 2>/dev/null" >> /root/cmd.sh && \
+    echo "chmod 777 -R /var/www/html/masterdata/logs 2>/dev/null" >> /root/cmd.sh && \
+    echo "chmod 777 -R /var/www/html/wapp/wcpcache/logs 2>/dev/null" >> /root/cmd.sh && \
+    echo "chmod 777 -R /var/www/html/wapp/upload 2>/dev/null" >> /root/cmd.sh && \
+    echo "nginx" >> /root/cmd.sh && \
+    echo "php-fpm7.3" >> /root/cmd.sh && \
+    echo "" >> /root/cmd.sh && \
+    chmod +x /root/cmd.sh
+
+WORKDIR /var/www/html
+
+CMD tail -f /dev/null
