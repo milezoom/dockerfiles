@@ -25,12 +25,12 @@ services:
         container_name: nodejs10
         volumes:
             - nodejs_data:/app
-    nodejs-latest:
+    nodejs18:
         build:
             context: .
-            dockerfile: Dockerfile.nodejs-latest
+            dockerfile: Dockerfile.nodejs18
         image: nodejs:1.0.0
-        container_name: nodejs-latest
+        container_name: nodejs18
         volumes:
             - nodejs_data:/app
     golang:
@@ -104,7 +104,7 @@ services:
     deskdev:
         build:
             context: .
-            dockerfile: Dockerfile.deskdev
+            dockerfile: Dockerfile.deskdevn
         image: deskdev:1.0.0
         container_name: deskdev
         environment:
